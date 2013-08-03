@@ -1,0 +1,2 @@
+- name: some random command
+  shell: /bin/echo "asdf!" > /home/vagrant/stuff

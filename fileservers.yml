@@ -1,0 +1,7 @@
+- name: setup fileservers
+  hosts: fileservers
+  user: root
+  
+  roles:
+    - common
+    - fileserver
