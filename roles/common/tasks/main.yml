@@ -1,2 +1,9 @@
-- name: some random command
-  shell: /bin/echo "asdf!" > /home/vagrant/stuff
+- name: make the 'user' group
+  user: name={{ item["name"] }}
+  sudo: yes
+  with_items: users
+
+- name: make the 'user' user
+  user: name={{ item["name"] }} group={{ item["name"] }} password={{ item["pass"] }}
+  sudo: yes
+  with_items: users
