@@ -1,0 +1,24 @@
+- name: install vsftpd
+  apt: pkg=vsftpd state=latest
+
+- name: configure vsftpd
+  template: src=vsftpd.conf.j2 dest=/etc/vsftpd.conf backup=yes
+  notify:
+  - restart vsftpd
+
+- name: see if ssl key exists
+  shell: "[ -f ~/etc/ssl/private/vsftpd.pem ] && echo 'exists' || echo ''"
+  register: ftp_ssl_exists
+
+- name: generate ssl key for vsftpd
+  shell: "{{ item }}"
+  notify:
+    - restart vsftpd
+  with_items:
+    - mkdir -p /etc/ssl/private
+    - chmod 700 /etc/ssl/private
+    - openssl req -x509 -nodes -subj "/C=US/ST=California/L=Berkeley/O=Cloyne" -days 3650 -newkey rsa:3072 -keyout /etc/ssl/private/vsftpd.key -out /etc/ssl/private/vsftpd.pem
+  when: (not ftp_ssl_exists.stdout)
+
+- name: start vsftpd
+  service: name=vsftpd state=started

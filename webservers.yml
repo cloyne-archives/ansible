@@ -1,0 +1,7 @@
+- name: setup webservers
+  hosts: webservers
+  user: root
+  
+  roles:
+    - common
+    - drupal

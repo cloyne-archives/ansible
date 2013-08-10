@@ -1,0 +1,15 @@
+- name: install apt_repository dependencies
+  apt: pkg=python-software-properties
+  sudo: yes
+
+- name: add aegir repo to apt sources
+  apt_repository: repo='deb http://debian.aegirproject.org stable main'
+  sudo: yes
+
+- name: add aegir key to apt
+  apt_key: url=http://debian.aegirproject.org/key.asc
+  sudo: yes
+
+- name: install aegir
+  apt: pkg=aegir2 update_cache=yes
+  sudo: yes

@@ -1,0 +1,11 @@
+- name: install samba
+  apt: pkg=samba state=latest
+
+- name: configure samba
+  template: src=smb.conf.j2 dest=/etc/samba/smb.conf backup=yes
+  notify:
+  - restart samba
+
+- name: start samba
+  service: name=samba state=started
+

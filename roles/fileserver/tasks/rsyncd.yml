@@ -1,0 +1,13 @@
+- name: install inetd
+  apt: pkg=openbsd-inetd state=latest
+
+- name: configure inetd for rsync
+  lineinfile: dest=/etc/inetd.conf regexp=^rsync line="rsync stream tcp nowait {{ user }} /usr/sbin/tcpd /usr/bin/rsync --daemon"
+  notify:
+    - restart inetd
+
+- name: start inetd
+  service: name=openbsd-inetd state=started
+
+- name: configure rsyncd
+  template: src=rsyncd.conf.j2 dest=/etc/rsyncd.conf backup=yes

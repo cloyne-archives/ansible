@@ -1,0 +1,13 @@
+- include: fs.yml
+
+- include: raid.yml
+
+- include: ftp.yml
+
+- include: samba.yml
+
+- include: torrent.yml
+
+- include: index.yml
+
+- include: rsyncd.yml

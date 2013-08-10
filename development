@@ -1,2 +1,5 @@
 [fileservers]
-127.0.0.1:7222 ansible_ssh_user=vagrant ansible_ssh_private_key_file=vagrant.key
+192.168.5.215 ansible_ssh_user=vagrant ansible_ssh_private_key_file=vagrant.key
+
+[webservers]
+192.168.5.215 ansible_ssh_user=vagrant ansible_ssh_private_key_file=vagrant.key

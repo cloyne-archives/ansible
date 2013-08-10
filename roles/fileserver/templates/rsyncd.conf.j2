@@ -1,0 +1,11 @@
+uid             = {{ user }}
+gid             = {{ user }}
+use chroot      = no
+max connections = 8
+pid file        = /var/run/rsyncd.pid
+timeout         = 600
+
+[storage]
+    path = /home/{{ user }}/storage
+    comment = storage files
+    read only = FALSE

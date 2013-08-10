@@ -1,0 +1,23 @@
+- name: install rtgui
+  apt: pkg=rtgui state=latest
+
+- name: configure rtorrent.rc
+  template: src=rtorrent.rc.j2 dest=/home/{{ user }}/.rtorrent.rc owner={{ user }} group={{ user }}
+
+- name: configure rtorrent.init
+  template: src=rtorrent.init.j2 dest=/etc/init.d/rtorrent
+  notify:
+    - restart rtorrent
+
+- name: make rtorrent executable
+  command: chmod +x /etc/init.d/rtorrent
+
+- name: make rtorrent start at system startup
+  command: update-rc.d rtorrent defaults
+
+- name: make rtorrent session directory
+  file: path=/home/{{ user }}/.session owner={{ user }} group={{ user }} state=directory
+
+- name: start rtorrent
+  service: name=rtorrent state=started
+

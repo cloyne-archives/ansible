@@ -1,0 +1,11 @@
+- name: restart vsftpd
+  service: name=vsftpd state=restarted
+
+- name: restart samba
+  service: name=samba state=restarted
+
+- name: restart rtorrent
+  service: name=rtorrent state=restarted
+
+- name: restart inetd
+  service: name=openbsd-inetd state=restarted

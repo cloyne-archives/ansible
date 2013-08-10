@@ -1,0 +1,5 @@
+- name: mkdir storage dir
+  file: path=/home/{{ user }}/storage owner={{ user }} group={{ user }} mode=0777 state=directory
+
+- name: mount storage
+  mount: name=/home/{{ user }}/storage src=/dev/sdb1 fstype=ext4 state=mounted

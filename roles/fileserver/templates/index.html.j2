@@ -1,0 +1,39 @@
+<html>
+  <head>
+    <title>{{ name }}!</title>
+  </head>
+  <body>
+    <h1>{{ banner }}</h1>
+    <h2>local files</h2>
+    <p>to share files stored locally on {{ name }}.{{ domain }},
+      <ul>
+        <li>using your web browser, connect to '<a href="ftp://{{ name }}.{{ domain }}">ftp://{{ name }}.{{ domain }}</a>'</li>
+        <li>using an ftp client, connect to '{{ name }}.{{ domain }}'</li>
+          <ul>
+            <li><a href="https://github.com/ahdinosaur/sketchy-ftp/blob/master/README.md">guide for any OS</a></li>
+          </ul>
+        </li>
+        <li>connect to the SKETCHY network folder in your file manager
+          <ul>
+            <li><a href="https://github.com/ahdinosaur/sketchy-on-os-x/blob/master/README.md">guide using Mac OS X</a></li>
+          </ul>
+        </li>
+      </ul>
+    </p>
+    <h2>torrents</h2>
+    <p>so you found <a href="http://thepiratebay.sx">some torrents</a> you <a href="http://promobay.org">like online</a>,</p>
+    <ul>
+      <li>
+         on your local computer, use torrent client like <a href="http://dev.deluge-torrent.org/wiki/Download">deluge</a>.
+      </li>
+      <li>to share torrents using our server as a torrent box,   
+        <ol>
+          <li>go <a href="http://{{ name }}.{{ domain }}/rtguid/">here</a> in your web browser</li>
+          <li>add any .torrent files you want the server to download/seed</li>
+          <li>after they finish downloading grab the files from <a href="ftp://{{ name }}.{{ domain }}">here</a></li>
+        </ol>
+      </li>
+    </ul>
+    <h3>please seed as much as possible</h3>
+  </body>
+</html>
