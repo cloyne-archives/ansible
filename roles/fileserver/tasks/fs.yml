@@ -38,6 +38,9 @@
 - name: mount tahoe node
   mount: name=/home/tahoe/node/ src=/dev/sdb1 fstype=xfs state=mounted
 
+- name: chmod tahoe node dir
+  file: path=/home/tahoe/node owner=tahoe group=tahoe mode=0755 state=directory
+
 - name: see if tahoe node already created
   shell: "[ -f /home/tahoe/node/tahoe.cfg ] && echo 'exists' || echo ''"
   register: tahoe_node_created
@@ -62,6 +65,7 @@
 
 - name: set furl in tahoe-lafs node
   lineinfile: dest=/home/tahoe/node/tahoe.cfg regexp=^introducer.furl line="introducer.furl = {{ tahoe_intro_furl.stdout }}"
+  sudo_user: tahoe
 
 - name: see if tahoe node already started
   shell: "[ -f /home/tahoe/node/twistd.pid ] && echo 'started' || echo ''"
@@ -70,6 +74,7 @@
 - name: start tahoe-lafs node
   shell: tahoe start /home/tahoe/node
   when: (not tahoe_node_started.stdout)
+  sudo_user: tahoe
 
 - name: see if aliases generated
   shell: "[ -f /home/tahoe/node/private/accounts ] && echo 'generated' || echo ''"
@@ -80,6 +85,7 @@
   notify:
     - restart tahoe
   when: (not tahoe_accounts_generated.stdout)
+  sudo_user: tahoe
 
 - name: get root cap
   shell: "cat /home/tahoe/node/private/aliases | cut -d : -f 2- | sed 's/^[ \t]*//'"
@@ -90,11 +96,13 @@
   notify:
     - restart tahoe
   when: (not tahoe_accounts_generated.stdout)
+  sudo_user: tahoe
 
 - name: configure tahoe-lafs node
   template: src=tahoe.node.cfg.j2 dest=/home/tahoe/node/tahoe.cfg backup=yes
   notify:
     - restart tahoe
+  sudo_user: tahoe
 
 - name: see if node ssh key already generated
   shell: "[ -f /home/tahoe/node/private/id_rsa.pub ] && echo 'generated' || echo ''"
@@ -105,6 +113,7 @@
   notify:
     - restart tahoe
   when: (not tahoe_ssh_generated.stdout)
+  sudo_user: tahoe
 
 - name: mkdir user storage dir
   file: path=/home/{{ user }}/storage owner={{ user }} group={{ user }} mode=0777 state=directory
@@ -114,4 +123,3 @@
 
 - name: sshfs tahoe storage to user storage
   shell: "echo {{ user }} | sshfs {{ user }}@localhost: /home/{{ user }}/storage -p 8022 -o password_stdin"
-  sudo_user: clone
