@@ -20,6 +20,7 @@
 
 - name: mkdir tahoe intro dir
   file: path=/home/tahoe/intro state=directory
+  sudo_user: tahoe
 
 - name: see if tahoe introducer already created
   shell: "[ -f /home/tahoe/intro/tahoe.cfg ] && echo 'exists' || echo ''"
@@ -28,9 +29,11 @@
 - name: create tahoe-lafs introducer
   shell: tahoe create-introducer /home/tahoe/intro/
   when: (not tahoe_intro_created.stdout)
+  sudo_user: tahoe
 
 - name: mkdir tahoe node dir
   file: path=/home/tahoe/node state=directory
+  sudo_user: tahoe
 
 - name: mount tahoe node
   mount: name=/home/tahoe/node/ src=/dev/sdb1 fstype=xfs state=mounted
@@ -42,6 +45,7 @@
 - name: create tahoe-lafs node
   shell: tahoe create-node /home/tahoe/node/
   when: (not tahoe_node_created.stdout)
+  sudo_user: tahoe
 
 - name: see if tahoe introducer already started
   shell: "[ -f /home/tahoe/intro/twistd.pid ] && echo 'started' || echo ''"
@@ -50,6 +54,7 @@
 - name: start tahoe-lafs introducer
   shell: tahoe start /home/tahoe/intro
   when: (not tahoe_intro_started.stdout)
+  sudo_user: tahoe
 
 - name: get furl from tahoe-lafs introducer
   shell: cat /home/tahoe/intro/introducer.furl

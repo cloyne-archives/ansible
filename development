@@ -1,5 +1,0 @@
-[fileservers]
-192.168.5.215 ansible_ssh_user=vagrant ansible_ssh_private_key_file=vagrant.key
-
-[webservers]
-192.168.5.215 ansible_ssh_user=vagrant ansible_ssh_private_key_file=vagrant.key
