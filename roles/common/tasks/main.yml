@@ -1,13 +1,16 @@
-- name: make the 'user' group
+- name: make the groups
+  group: name={{ item["name"] }}
+  with_items: users
+
+- name: make the users
   user: name={{ item["name"] }}
+        group={{ item["name"] }}
+        password={{ item["pass"] }}
   with_items: users
 
-- name: make the 'user' user
-  user: name={{ item["name"] }} group={{ item["name"] }} password={{ item["pass"] }}
-  with_items: users
-
-- name: update apt cache
-  apt: pkg=linux-base state=latest update_cache=yes
+# update apt cache if last update is more
+# than more than 3600 seconds ago
+- apt: update_cache=yes cache_valid_time=3600
 
 - name: install common packages
   apt: pkg={{ item }} state=latest
