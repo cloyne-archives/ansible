@@ -1,5 +1,112 @@
-- name: mkdir storage dir
+# https://we.riseup.net/debian/tahoe
+
+- name: install tahoe-lafs
+  apt: pkg=tahoe-lafs state=latest
+
+# need module to format sdb1 if not already
+
+- name: install xfsprogs
+  apt: pkg=xfsprogs state=latest
+
+- name: create xfs filesystem on /dev/sdb1
+  filesystem: fstype=xfs dev=/dev/sdb1
+
+- name: create tahoe group
+  group: name=tahoe
+
+- name: make the users
+  user: name=tahoe
+        group=tahoe
+
+- name: mkdir tahoe intro dir
+  file: path=/home/tahoe/intro state=directory
+
+- name: see if tahoe introducer already created
+  shell: "[ -f /home/tahoe/intro/tahoe.cfg ] && echo 'exists' || echo ''"
+  register: tahoe_intro_created
+
+- name: create tahoe-lafs introducer
+  shell: tahoe create-introducer /home/tahoe/intro/
+  when: (not tahoe_intro_created.stdout)
+
+- name: mkdir tahoe node dir
+  file: path=/home/tahoe/node state=directory
+
+- name: mount tahoe node
+  mount: name=/home/tahoe/node/ src=/dev/sdb1 fstype=xfs state=mounted
+
+- name: see if tahoe node already created
+  shell: "[ -f /home/tahoe/node/tahoe.cfg ] && echo 'exists' || echo ''"
+  register: tahoe_node_created
+
+- name: create tahoe-lafs node
+  shell: tahoe create-node /home/tahoe/node/
+  when: (not tahoe_node_created.stdout)
+
+- name: see if tahoe introducer already started
+  shell: "[ -f /home/tahoe/intro/twistd.pid ] && echo 'started' || echo ''"
+  register: tahoe_intro_started
+
+- name: start tahoe-lafs introducer
+  shell: tahoe start /home/tahoe/intro
+  when: (not tahoe_intro_started.stdout)
+
+- name: get furl from tahoe-lafs introducer
+  shell: cat /home/tahoe/intro/introducer.furl
+  register: tahoe_intro_furl
+
+- name: set furl in tahoe-lafs node
+  lineinfile: dest=/home/tahoe/node/tahoe.cfg regexp=^introducer.furl line="introducer.furl = {{ tahoe_intro_furl.stdout }}"
+
+- name: see if tahoe node already started
+  shell: "[ -f /home/tahoe/node/twistd.pid ] && echo 'started' || echo ''"
+  register: tahoe_node_started
+
+- name: start tahoe-lafs node
+  shell: tahoe start /home/tahoe/node
+  when: (not tahoe_node_started.stdout)
+
+- name: see if aliases generated
+  shell: "[ -f /home/tahoe/node/private/accounts ] && echo 'generated' || echo ''"
+  register: tahoe_accounts_generated
+
+- name: create aliases
+  shell: tahoe create-alias -d /home/tahoe/node {{ user }}
+  notify:
+    - restart tahoe
+  when: (not tahoe_accounts_generated.stdout)
+
+- name: get root cap
+  shell: "cat /home/tahoe/node/private/aliases | cut -d : -f 2- | sed 's/^[ \t]*//'"
+  register: tahoe_user_cap
+
+- name: create accounts
+  template: src=tahoe-accounts.j2 dest=/home/tahoe/node/private/accounts backup=yes
+  notify:
+    - restart tahoe
+  when: (not tahoe_accounts_generated.stdout)
+
+- name: configure tahoe-lafs node
+  template: src=tahoe.node.cfg.j2 dest=/home/tahoe/node/tahoe.cfg backup=yes
+  notify:
+    - restart tahoe
+
+- name: see if node ssh key already generated
+  shell: "[ -f /home/tahoe/node/private/id_rsa.pub ] && echo 'generated' || echo ''"
+  register: tahoe_ssh_generated
+
+- name: generate node ssh key
+  shell: yes | ssh-keygen -f /home/tahoe/node/private/id_rsa -t rsa -N ''
+  notify:
+    - restart tahoe
+  when: (not tahoe_ssh_generated.stdout)
+
+- name: mkdir user storage dir
   file: path=/home/{{ user }}/storage owner={{ user }} group={{ user }} mode=0777 state=directory
 
-- name: mount storage
-  mount: name=/home/{{ user }}/storage src=/dev/sdb1 fstype=ext4 state=mounted
+- name: install sshfs
+  apt: pkg=sshfs state=latest
+
+- name: sshfs tahoe storage to user storage
+  shell: "echo {{ user }} | sshfs {{ user }}@localhost: /home/{{ user }}/storage -p 8022 -o password_stdin"
+  sudo_user: clone

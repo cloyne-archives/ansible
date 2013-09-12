@@ -1,6 +1,6 @@
-- include: fs.yml
-
 - include: raid.yml
+
+- include: fs.yml
 
 - include: ftp.yml
 

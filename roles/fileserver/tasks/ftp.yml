@@ -7,7 +7,7 @@
   - restart vsftpd
 
 - name: see if ssl key exists
-  shell: "[ -f ~/etc/ssl/private/vsftpd.pem ] && echo 'exists' || echo ''"
+  shell: "[ -f /etc/ssl/private/vsftpd.pem ] && echo 'exists' || echo ''"
   register: ftp_ssl_exists
 
 - name: generate ssl key for vsftpd
