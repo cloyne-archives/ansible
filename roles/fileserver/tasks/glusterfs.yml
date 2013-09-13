@@ -22,8 +22,13 @@
 - name: mkdir /export/sdb1/brick
   file: path=/export/sdb1/brick state=directory
 
+- name: see if gluster volume already created
+  shell: "gluster volume info | grep \"^Volume Name: {{ domain }}\""
+  register: gluster_volume_created
+
 - name: setup a gluster volume
-  shell: gluster volume create gv0 file0.cloyne.net:/export/sdb1/brick
+  shell: gluster volume create {{ domain }} file.{{ domain }}:/export/sdb1/brick
+  when: (not gluster_volume_created.stdout)
 
 - name: start the gluster volume
   shell: gluster volume start gv0
