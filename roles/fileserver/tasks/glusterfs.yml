@@ -1,0 +1,35 @@
+- name: add apt signing key for gluster
+  apt_key: url=http://download.gluster.org/pub/gluster/glusterfs/3.4/3.4.0/Debian/pubkey.gpg state=present
+
+- name: add apt repository for gluster
+  apt_repository: repo='deb http://download.gluster.org/pub/gluster/glusterfs/3.4/3.4.0/Debian/apt wheezy main' state=present
+
+- name: update package list
+  apt: update_cache=yes
+
+- name: install glusterfs client
+  apt: pkg=glusterfs-client state=latest
+
+- name: install glusterfs server
+  apt: pkg=glusterfs-server state=latest
+
+- name: mkdir /export/sdb1
+  file: path=/export/sdb1 state=directory
+
+- name: mount gluster partition as a brick
+  mount: name=/export/sdb1 src=/dev/sdb1 fstype=xfs state=mounted
+
+- name: mkdir /export/sdb1/brick
+  file: path=/export/sdb1/brick state=directory
+
+- name: setup a gluster volume
+  shell: gluster volume create gv0 file0.cloyne.net:/export/sdb1/brick
+
+- name: start the gluster volume
+  shell: gluster volume start gv0
+
+- name: mount the gluster volume
+  mount: name=/home/{{ user }}/storage src=file0.cloyne.net:gv0 fstype=glusterfs state=mounted
+
+- name: change permission of volume
+  file: path=/home/{{ user }}/storage owner={{ user }} group={{ user }} state=directory
