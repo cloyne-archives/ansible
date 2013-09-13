@@ -34,7 +34,7 @@
   shell: gluster volume start {{ name }}
 
 - name: mount the gluster volume
-  mount: name=/home/{{ user }}/storage src={{ name }}:{{ name }}.{{ domain }} fstype=glusterfs state=mounted
+  mount: name=/home/{{ user }}/storage src={{ name }}.{{ domain }}:{{ name }} fstype=glusterfs state=mounted
 
 - name: change permission of volume
   file: path=/home/{{ user }}/storage owner={{ user }} group={{ user }} state=directory
