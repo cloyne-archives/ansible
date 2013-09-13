@@ -17,24 +17,24 @@
   file: path=/export/sdb1 state=directory
 
 - name: mount gluster partition as a brick
-  mount: name=/export/sdb1 src=/dev/sdb1 fstype=xfs state=mounted
+  mount: name=/export/{{ partition }} src=/dev/{{ partition }} fstype=xfs state=mounted
 
 - name: mkdir /export/sdb1/brick
-  file: path=/export/sdb1/brick state=directory
+  file: path=/export/{{ partition }}/brick state=directory
 
 - name: see if gluster volume already created
-  shell: "gluster volume info | grep \"^Volume Name: {{ name }}.{{ domain }}\""
+  shell: "gluster volume info | grep \"^Volume Name: {{ name }}\""
   register: gluster_volume_created
 
 - name: setup a gluster volume
-  shell: gluster volume create {{ name }}.{{ domain }} {{ name }}.{{ domain }}:/export/sdb1/brick
+  shell: gluster volume create {{ name }} {{ name }}.{{ domain }}:/export/{{ partition }}/brick
   when: (not gluster_volume_created.stdout)
 
 - name: start the gluster volume
-  shell: gluster volume start {{ name }}.{{ domain }}
+  shell: gluster volume start {{ name }}
 
 - name: mount the gluster volume
-  mount: name=/home/{{ user }}/storage src={{ name }}.{{ domain }}:{{ name }}.{{ domain }} fstype=glusterfs state=mounted
+  mount: name=/home/{{ user }}/storage src={{ name }}:{{ name }}.{{ domain }} fstype=glusterfs state=mounted
 
 - name: change permission of volume
   file: path=/home/{{ user }}/storage owner={{ user }} group={{ user }} state=directory
