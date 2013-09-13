@@ -1,4 +1,5 @@
-name: sketchy
+name: files
 domain: cloyne.net
 user: clone
 banner: welcome to the Cloyne file server.
+partition: sdb1
