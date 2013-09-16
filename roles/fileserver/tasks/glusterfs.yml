@@ -23,7 +23,7 @@
   file: path=/export/{{ partition }}/brick state=directory
 
 - name: see if gluster volume already created
-  shell: "gluster volume info {{ name }} | grep \"^Volume Name: {{ name }}$\""
+  shell: "gluster volume info | grep \"^Volume Name: {{ name }}$\""
   register: gluster_volume_created
   ignore_errors: True
 
@@ -32,7 +32,7 @@
   when: (not gluster_volume_created.stdout)
 
 - name: see if gluster volume already started
-  shell: "gluster volume info files | grep \"^Status: Started$\""
+  shell: "gluster volume info {{ name }} | grep \"^Status: Started$\""
   register: gluster_volume_started
   ignore_errors: True
 

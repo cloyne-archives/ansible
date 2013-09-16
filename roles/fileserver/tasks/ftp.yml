@@ -1,6 +1,9 @@
 - name: install vsftpd
   apt: pkg=vsftpd state=latest
 
+- name: depriv user home dir for vsftp
+  file: path=/home/{{ user }} owner={{ user }} group={{ user }} mode=0000 state=directory
+
 - name: configure vsftpd
   template: src=vsftpd.conf.j2 dest=/etc/vsftpd.conf backup=yes
   notify:

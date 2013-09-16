@@ -11,3 +11,6 @@
   file: path=/home/{{ user }}/storage owner={{ user }} group={{ user }} mode=0777 state=directory
 
 - include: glusterfs.yml
+
+- name: repriv user storage dir
+  file: path=/home/{{ user }}/storage owner={{ user }} group={{ user }} mode=0777 state=directory
