@@ -1,3 +1,6 @@
+- name: install rsync
+  apt: pkg=rsync state=latest
+
 - name: install inetd
   apt: pkg=openbsd-inetd state=latest
 
@@ -5,6 +8,12 @@
   lineinfile: dest=/etc/inetd.conf regexp=^rsync line="rsync stream tcp nowait {{ user }} /usr/sbin/tcpd /usr/bin/rsync --daemon"
   notify:
     - restart inetd
+
+- name: create run dir in user dir
+  file: path=/home/{{ user }}/run owner={{ user }} group={{ user }} mode=0700 state=directory
+
+- name: create log dir in user dir
+  file: path=/home/{{ user }}/log owner={{ user }} group={{ user }} mode=0700 state=directory
 
 - name: start inetd
   service: name=openbsd-inetd state=started

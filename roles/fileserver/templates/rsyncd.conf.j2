@@ -2,7 +2,9 @@ uid             = {{ user }}
 gid             = {{ user }}
 use chroot      = no
 max connections = 8
-pid file        = /var/run/rsyncd.pid
+log file        = /home/{{ user }}/log/rsync.log
+pid file        = /home/{{ user }}/run/rsync.pid
+lock file       = /home/{{ user }}/run/rsync.lock
 timeout         = 600
 
 [storage]
