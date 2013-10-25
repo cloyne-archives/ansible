@@ -14,3 +14,5 @@ packages:
   - screen
   - tmux
   - openssl
+  - build-essential
+  - git
