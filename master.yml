@@ -1,0 +1,8 @@
+- name: setup master server
+  hosts: master
+  user: root
+  
+  roles:
+    - common
+    - cobbler
+  sudo: yes

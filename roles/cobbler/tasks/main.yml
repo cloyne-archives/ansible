@@ -1,0 +1,40 @@
+- name: install cobbler dependencies
+  apt: pkg=$item state=installed
+  with_items:
+    - python-yaml
+    - python-dateutil
+    - python-cheetah
+    - python-netaddr
+    - python-simplejson
+    - python-urlgrabber
+    - python-twisted
+    - apache2
+    - libapache2-mod-wsgi
+    - libapache2-mod-python
+    - python-django
+    - debmirror
+    - createrepo
+    - hardlink
+    - distro-info
+    - atftpd
+    - cman
+    - isc-dhcp-server
+    - syslinux
+
+- name: download python-cobbler
+  get_url: url=http://launchpadlibrarian.net/150143165/python-cobbler_2.4.0-0ubuntu4_all.deb dest=~/python-cobbler.deb
+
+- name: install python-cobbler
+  shell: dpkg -i ~/python-cobbler.deb || (apt-get -f -y install && dpkg -i ~/python-cobbler.deb)
+
+- name: download cobbler-common
+  get_url: url=http://launchpadlibrarian.net/150143167/cobbler-common_2.4.0-0ubuntu4_all.deb dest=~/cobbler-common.deb
+  
+- name: install cobbler-common
+  shell: dpkg -i ~/cobbler-common.deb
+
+- name: download cobbler
+  get_url: url=http://launchpadlibrarian.net/150143164/cobbler_2.4.0-0ubuntu4_all.deb dest=~/cobbler.deb
+  
+- name: install cobbler
+  shell: dpkg -i ~/cobbler.deb
