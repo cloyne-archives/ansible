@@ -1,0 +1,12 @@
+- name: add spotify key
+  apt_key: id=94558F59 url=http://keyserver.ubuntu.com/pks/lookup?op=get&fingerprint=on&search=0x082CCEDF94558F59 state=present
+
+- name: add spotify repo
+  apt_repository: repo='deb http://repository.spotify.com stable non-free' state=present
+  notify:
+    - update apt
+
+- meta: flush_handlers
+
+- name: install spotify
+  apt: pkg=spotify-client

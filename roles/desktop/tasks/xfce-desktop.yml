@@ -1,0 +1,19 @@
+- name: register other desktop configurations
+  shell: ls -1 /home/{{user}}/.config/xfce4/desktop/
+  register: other_desktop_configs
+
+- name: remove other desktop configurations
+  file: name=/home/{{user}}/.config/xfce4/desktop/{{item}} state=absent
+  with_items: other_desktop_configs.stdout_lines
+  when: item != 'icons.screen0.rc'
+
+- name: configure desktop icons
+  template: src=icons.screen0.rc.j2 dest=/home/{{user}}/.config/xfce4/desktop/icons.screen0.rc owner={{user}} group={{user}}
+
+- name: add desktop icons
+  shell: rsync /usr/share/applications/{{item.file}}.desktop /home/{{user}}/Desktop/{{item.file}}.desktop --copy-links
+  with_items: icons
+
+- name: chown and chmod desktop icons
+  file: path=/home/{{user}}/Desktop/{{item.file}}.desktop owner={{user}} group={{user}} mode=755 state=file
+  with_items: icons

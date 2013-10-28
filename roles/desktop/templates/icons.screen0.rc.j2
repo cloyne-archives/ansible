@@ -1,0 +1,17 @@
+[Home]
+row=0
+col=0
+
+[File System]
+row=1
+col=0
+
+[Trash]
+row=2
+col=0
+{% for icon in icons %}
+
+[{{icon.name}}]
+row={{icon.row}}
+col={{icon.col}}
+{% endfor %}

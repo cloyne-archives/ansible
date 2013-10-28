@@ -16,3 +16,4 @@ packages:
   - openssl
   - build-essential
   - git
+  - vim

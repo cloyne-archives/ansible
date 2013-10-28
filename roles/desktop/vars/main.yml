@@ -1,0 +1,64 @@
+programs:
+  - firefox
+  - libreoffice
+  - gimp
+  - inkscape
+  - vlc
+  - clementine
+  - geany
+  - shotwell
+  - deluge
+  - file-roller
+  - virtualbox
+
+user: clone
+
+icons:
+  - file: firefox
+    name: Firefox Web Browser
+    row: 0
+    col: 1
+  - file: google-chrome
+    name: Google Chrome
+    row: 1
+    col: 1
+  - file: libreoffice-startcenter
+    name: LibreOffice
+    row: 0
+    col: 2
+  - file: libreoffice-writer
+    name: LibreOffice Writer
+    row: 1
+    col: 2
+  - file: libreoffice-impress
+    name: LibreOffice Impress
+    row: 2
+    col: 2
+  - file: libreoffice-calc
+    name: LibreOffice Calc
+    row: 3
+    col: 2
+  - file: geany
+    name: Geany
+    row: 4
+    col: 2
+  - file: gimp
+    name: GIMP Image Editor
+    row: 0
+    col: 3
+  - file: inkscape
+    name: Inkscape
+    row: 1
+    col: 3
+  - file: vlc
+    name: VLC media player
+    row: 0
+    col: 4
+  - file: spotify
+    name: Spotify
+    row: 1
+    col: 4
+  - file: clementine
+    name: Clementine
+    row: 2
+    col: 4

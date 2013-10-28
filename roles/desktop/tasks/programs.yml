@@ -1,0 +1,7 @@
+- name: install desktop packages
+  apt: pkg=$item state=latest
+  with_items: programs
+
+- include: programs-google-chrome.yml
+#- include: programs-clicompanion.yml
+- include: programs-spotify.yml

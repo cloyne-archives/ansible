@@ -1,0 +1,10 @@
+- name: add clicompanion repo
+  apt_repository: repo='ppa:clicompanion-devs/clicompanion-nightlies'
+
+- name: force update apt
+  apt: update_cache=yes
+
+- meta: flush_handlers
+
+- name: install clicompanion
+  apt: pkg=clicompanion

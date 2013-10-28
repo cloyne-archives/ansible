@@ -1,0 +1,8 @@
+- name: setup fileservers
+  hosts: desktops
+  user: root
+  
+  roles:
+    - common
+    - desktop
+  sudo: yes

@@ -1,0 +1,3 @@
+- include: programs.yml
+
+- include: xfce.yml
