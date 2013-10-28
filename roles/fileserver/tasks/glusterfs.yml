@@ -13,35 +13,43 @@
 - name: install glusterfs server
   apt: pkg=glusterfs-server state=latest
 
-- name: mkdir /export/sdb1
-  file: path=/export/sdb1 state=directory
+- name: mkdir /export/partition
+  file: path=/export/{{item.part}} state=directory
+  with_items: disks
 
 - name: mount gluster partition as a brick
-  mount: name=/export/{{ partition }} src=/dev/{{ partition }} fstype=xfs state=mounted
+  mount: name=/export/{{item.part}} src=/dev/{{item.part}} fstype={{item.fstype}} state=mounted
+  with_items: disks
 
-- name: mkdir /export/sdb1/brick
-  file: path=/export/{{ partition }}/brick state=directory
+- name: mkdir /export/partition/brick
+  file: path=/export/{{item.part}}/brick state=directory
+  with_items: disks
 
 - name: see if gluster volume already created
-  shell: "gluster volume info | grep \"^Volume Name: {{ name }}$\""
+  shell: "gluster volume info | grep \"^Volume Name: {{name}}$\""
   register: gluster_volume_created
   ignore_errors: True
 
 - name: setup a gluster volume
-  shell: gluster volume create {{ name }} {{ name }}.{{ domain }}:/export/{{ partition }}/brick
+  shell: gluster volume create {{name}}
   when: (not gluster_volume_created.stdout)
 
+- name: add bricks to gluster volume
+  shell: gluster volume add-brick {{name}} {{name}}.{{domain}}:/export/{{item.dev}}{{item.part}}/brick
+  when: (not gluster_volume_created.stdout)
+  with_items: disks
+
 - name: see if gluster volume already started
-  shell: "gluster volume info {{ name }} | grep \"^Status: Started$\""
+  shell: "gluster volume info {{name}} | grep \"^Status: Started$\""
   register: gluster_volume_started
   ignore_errors: True
 
 - name: start the gluster volume
-  shell: gluster volume start {{ name }}
+  shell: gluster volume start {{name}}
   when: (not gluster_volume_started.stdout)
 
 - name: mount the gluster volume
-  mount: name=/home/{{ user }}/storage src={{ name }}.{{ domain }}:{{ name }} fstype=glusterfs state=mounted
+  mount: name=/home/{{user}}/storage src={{name}}.{{domain}}:{{name}} fstype=glusterfs state=mounted
 
 - name: change permission of volume
-  file: path=/home/{{ user }}/storage owner={{ user }} group={{ user }} state=directory
+  file: path=/home/{{user}}/storage owner={{user}} group={{user}} state=directory

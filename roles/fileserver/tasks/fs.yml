@@ -1,16 +1,17 @@
 
-# need module to format sdb1 if not already
+# need module to format disks if not already
 
 - name: install xfsprogs
   apt: pkg=xfsprogs state=latest
 
 - name: create xfs filesystem on /dev/sdb1
-  filesystem: fstype=xfs dev=/dev/sdb1
+  filesystem: fstype={{item.fstype}} dev=/dev/{{item.dev}}{item.part}}
+  with_items: disks
 
 - name: mkdir user storage dir
-  file: path=/home/{{ user }}/storage owner={{ user }} group={{ user }} mode=0777 state=directory
+  file: path=/home/{{user}}/storage owner={{user}} group={{user}} mode=0777 state=directory
 
 - include: glusterfs.yml
 
 - name: repriv user storage dir
-  file: path=/home/{{ user }}/storage owner={{ user }} group={{ user }} mode=0777 state=directory
+  file: path=/home/{{user}}/storage owner={{user}} group={{user}} mode=0777 state=directory

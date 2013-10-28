@@ -2,4 +2,8 @@ name: files
 domain: cloyne.net
 user: clone
 banner: welcome to the Cloyne file server.
-partition: sdb1
+
+disks:
+  dev: sdb
+  part: 1
+  fstype: xfs
