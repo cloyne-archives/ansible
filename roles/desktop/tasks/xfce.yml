@@ -1,7 +1,7 @@
 - name: install xfce packages
   apt: pkg=$item state=latest
   with_items:
-    - xfce4
+    - xfce-desktop
     - xfce4-goodies
 
 - include: xfce-desktop.yml

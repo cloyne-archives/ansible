@@ -1,3 +1,8 @@
 - include: programs.yml
 
-- include: xfce.yml
+- name: install desktop environment
+  apt: pkg=$item state=latest
+  with_items: {{item.packages}}
+
+- include: {{desktop.name}}.yml
+  with_items: {{desktop}}

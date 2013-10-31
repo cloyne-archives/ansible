@@ -1,0 +1,7 @@
+desktop:
+  - name: xfce
+    packages:
+      - xubuntu-desktop
+  - name: kde
+    packages:
+      - kubuntu-desktop

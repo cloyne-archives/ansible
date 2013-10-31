@@ -1,0 +1,7 @@
+desktop:
+  - name: xfce
+    packages:
+      - task-xfce-desktop
+  - name: kde
+    packages:
+      - task-kde-desktop
