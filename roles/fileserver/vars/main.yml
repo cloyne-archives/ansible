@@ -7,3 +7,6 @@ disks:
   - dev: sdb
     part: 1
     fstype: xfs
+  - dev: sdc
+    part: 1
+    fstype: xfs
