@@ -1,2 +1,2 @@
 [fileservers]
-scallywag
+files.cloyne.net ansible_ssh_user=nm

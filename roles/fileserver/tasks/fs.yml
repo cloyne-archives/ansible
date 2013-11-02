@@ -5,7 +5,7 @@
   apt: pkg=xfsprogs state=latest
 
 - name: create xfs filesystem on /dev/sdb1
-  filesystem: fstype={{item.fstype}} dev=/dev/{{item.dev}}{item.part}}
+  filesystem: fstype={{item.fstype}} dev=/dev/{{item.dev}}{{item.part}}
   with_items: disks
 
 - name: mkdir user storage dir

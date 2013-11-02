@@ -4,6 +4,6 @@ user: clone
 banner: welcome to the Cloyne file server.
 
 disks:
-  dev: sdb
-  part: 1
-  fstype: xfs
+  - dev: sdb
+    part: 1
+    fstype: xfs

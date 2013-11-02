@@ -14,15 +14,15 @@
   apt: pkg=glusterfs-server state=latest
 
 - name: mkdir /export/partition
-  file: path=/export/{{item.part}} state=directory
+  file: path=/export/{{item.dev}}{{item.part}} state=directory
   with_items: disks
 
 - name: mount gluster partition as a brick
-  mount: name=/export/{{item.part}} src=/dev/{{item.part}} fstype={{item.fstype}} state=mounted
+  mount: name=/export/{{item.dev}}{{item.part}} src=/dev/{{item.dev}}{{item.part}} fstype={{item.fstype}} state=mounted
   with_items: disks
 
 - name: mkdir /export/partition/brick
-  file: path=/export/{{item.part}}/brick state=directory
+  file: path=/export/{{item.dev}}{{item.part}}/brick state=directory
   with_items: disks
 
 - name: see if gluster volume already created
