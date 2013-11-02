@@ -34,10 +34,16 @@
   shell: gluster volume create {{name}}
   when: (not gluster_volume_created.stdout)
 
-- name: add bricks to gluster volume
-  shell: gluster volume add-brick {{name}} {{name}}.{{domain}}:/export/{{item.dev}}{{item.part}}/brick
-  when: (not gluster_volume_created.stdout)
+- name: see if gluster bricks already added
+  shell: "gluster volume info | grep -E \"^Brick[0-9]+: {{name}}.{{domain}}:/export/{{item.dev}}{{item.part}}/brick$\""
+  register: gluster_brick_added
+  ignore_errors: True
   with_items: disks
+
+- name: add bricks to gluster volume
+  shell: gluster volume add-brick {{name}} {{name}}.{{domain}}:/export/{{item.item.dev}}{{item.item.part}}/brick
+  when: (not item.stdout)
+  with_items: gluster_brick_added.results
 
 - name: see if gluster volume already started
   shell: "gluster volume info {{name}} | grep \"^Status: Started$\""
