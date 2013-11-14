@@ -31,7 +31,7 @@
   ignore_errors: True
 
 - name: setup a gluster volume
-  shell: gluster volume create {{name}}
+  shell: gluster volume create {{name}}{% for disk in disks %} {{name}}.{{domain}}:/export/{{disk.dev}}{{disk.part}}/brick{% endfor %}
   when: (not gluster_volume_created.stdout)
 
 - name: see if gluster bricks already added

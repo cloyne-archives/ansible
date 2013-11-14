@@ -1,4 +1,4 @@
-name: files
+name: files2
 domain: cloyne.net
 user: clone
 banner: welcome to the Cloyne file server.
@@ -7,6 +7,6 @@ disks:
   - dev: sdb
     part: 1
     fstype: xfs
-  - dev: sdc
-    part: 1
-    fstype: xfs
+#  - dev: sdc
+#    part: 1
+#    fstype: xfs

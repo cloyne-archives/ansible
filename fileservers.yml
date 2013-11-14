@@ -6,3 +6,7 @@
     - common
     - fileserver
   sudo: yes
+  vars_prompt:
+    - name: "fileserver_password"
+      prompt: "what is the fileserver password?"
+      private: yes
