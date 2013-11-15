@@ -38,4 +38,6 @@
   sudo_user: postgres
   tags: owncloud
 
-#- name: configure owncloud
+- name: configure owncloud
+  template: src=owncloud-autoconfig.php.j2 dest=/var/www/owncloud/config/autoconfig.php owner=www-data group=www-data
+  tags: owncloud
