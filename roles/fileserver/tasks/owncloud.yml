@@ -41,3 +41,7 @@
 - name: configure owncloud
   template: src=owncloud-autoconfig.php.j2 dest=/var/www/owncloud/config/autoconfig.php owner=www-data group=www-data
   tags: owncloud
+
+- name: configure owncloud local mount
+  template: src=owncloud-mount.json.j2 dest=/var/www/owncloud/data/mount.json owner=www-data group=www-data
+  tags: owncloud
