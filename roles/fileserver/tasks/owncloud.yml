@@ -1,27 +1,41 @@
 - name: add apt signing key for owncloud
   apt_key: url=http://download.opensuse.org/repositories/isv:ownCloud:community/Debian_7.0/Release.key state=present
+  tags: owncloud
 
 - name: add apt repository for owncloud
   apt_repository: repo='deb http://download.opensuse.org/repositories/isv:ownCloud:community/Debian_7.0/ /' state=present
+  tags: owncloud
 
 - name: update package list
   apt: update_cache=yes
+  tags: owncloud
 
 - name: install owncloud
   apt: pkg=owncloud state=latest
+  tags: owncloud
 
-- name: install postresql
+- name: install postgresql
   apt: pkg=$item state=latest
   with_items:
     - postgresql
     - postgresql-client
     - libpq-dev
     - python-psycopg2
+  tags: owncloud
 
-- name: make postresql database
+- name: make postgresql database
   postgresql_db: name=owncloud
+  sudo_user: postgres
+  tags: owncloud
 
-- name: add owncloud user for postresql
-  postgresql_user: name=owncloud db=owncloud password=$fileserver_password
+- name: add owncloud user for postgresql
+  postgresql_user: name=owncloud db=owncloud password=$fileserver_password priv=ALL
+  sudo_user: postgres
+  tags: owncloud
+
+- name: ensure owncloud user does not have unnecessary privilege
+  postgresql_user: user=owncloud role_attr_flags=NOSUPERUSER,NOCREATEDB
+  sudo_user: postgres
+  tags: owncloud
 
 #- name: configure owncloud
