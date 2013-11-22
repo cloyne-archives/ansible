@@ -1,5 +1,8 @@
 - name: install apache
   apt: pkg=apache2 state=latest
 
+- name: install php accelerator
+  apt: pkg=php-apc state=latest
+
 - name: add index page
   template: src=index.html.j2 dest=/var/www/index.html backup=yes

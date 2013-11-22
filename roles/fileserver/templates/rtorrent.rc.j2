@@ -1,12 +1,12 @@
 scgi_port = 127.0.0.1:5000
 
-directory = /home/{{ user }}/storage/
+directory = /home/{{ user }}/storage/torrents/
 
 session = /home/{{ user }}/.session
 
 # watch a directory for new torrents, and stop those that have been
 # deleted.
-schedule = watch_directory,5,5,load_start=/home/{{ user }}/storage/*torrent
+schedule = watch_directory,5,5,load_start=/home/{{ user }}/storage/torrents/*torrent
 schedule = untied_directory,5,5,stop_untied=
 
 # allows incoming encrypted connections, starts unencrypted
