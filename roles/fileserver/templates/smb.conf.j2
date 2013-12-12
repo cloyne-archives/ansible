@@ -337,8 +337,8 @@
 ;   postexec = /bin/umount /cdrom
 
 # Guest share
-[sketchy]
-   comment = Guest access share for Cloyne
+[storage]
+   comment = Guest access share for {{ name }}.{{ domain }}
    path = /home/{{ user }}/storage
    browseable = yes
    writable = yes
@@ -346,3 +346,5 @@
    guest only = yes
    create mask = 0777
    directory mask = 0777
+   force user = clone
+   force group = clone
