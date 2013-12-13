@@ -1,0 +1,5 @@
+- name: setup repo for testing
+  apt_repository: repo="deb http://http.us.debian.org/debian jessie main non-free contrib"
+
+- name: update package list
+  apt: update_cache=yes
