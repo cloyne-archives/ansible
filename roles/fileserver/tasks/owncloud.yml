@@ -39,15 +39,15 @@
   tags: owncloud
 
 - name: configure owncloud autoconfig.php
-  template: src=owncloud-autoconfig.php.j2 dest=/var/www/owncloud/config/autoconfig.php owner=www-data group=www-data
+  template: src=owncloud-autoconfig.php.j2 dest=/etc/owncloud/autoconfig.php owner=www-data group=www-data
   tags: owncloud
 
 - name: configure owncloud memory_limit in .htaccess
-  lineinfile: dest=/var/www/owncloud/.htaccess regexp="^php_value memory_limit" line="php_value memory_limit 20000M"
+  lineinfile: dest=/etc/owncloud/htaccess regexp="^php_value memory_limit" line="php_value memory_limit 20000M"
   notify:
     - restart httpd
   tags: owncloud
 
 - name: configure owncloud local mount
-  template: src=owncloud-mount.json.j2 dest=/var/www/owncloud/data/mount.json owner=www-data group=www-data
+  template: src=owncloud-mount.json.j2 dest=/usr/share/owncloud/data/mount.json owner=www-data group=www-data
   tags: owncloud
