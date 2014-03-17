@@ -21,6 +21,7 @@
     - postgresql-client
     - libpq-dev
     - python-psycopg2
+    - php5-pgsql
   tags: owncloud
 
 - name: make postgresql database
